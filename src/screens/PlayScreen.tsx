@@ -51,15 +51,13 @@ export function PlayScreen({ game }: PlayScreenProps) {
           השהה
         </button>
       </div>
-      <div className="play-meta">
-        <p className={`now-playing team-${state.currentTeam}`}>
-          {currentTeamName} מתארים
-        </p>
-        <TimerDisplay
-          secondsLeft={state.secondsLeft}
-          totalSeconds={state.settings.timerSeconds}
-        />
-      </div>
+      <p className={`now-playing team-${state.currentTeam}`}>
+        {currentTeamName} מתארים
+      </p>
+      <TimerDisplay
+        secondsLeft={state.secondsLeft}
+        totalSeconds={state.settings.timerSeconds}
+      />
       <GameCard card={card} feedback={state.lastFeedback} />
       <p className="play-count">נותרו {state.remaining.length} קלפים</p>
       <div className="play-actions">

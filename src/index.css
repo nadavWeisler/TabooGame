@@ -32,6 +32,7 @@ html,
 body,
 #root {
   min-height: 100%;
+  overflow-x: hidden;
 }
 
 html {
@@ -107,8 +108,7 @@ button {
 .kicker,
 .hint,
 .lede,
-.play-count,
-.play-meta p {
+.play-count {
   margin: 0;
 }
 
@@ -122,11 +122,11 @@ button {
 
 .logo {
   font-family: var(--display);
-  font-size: clamp(3.4rem, 16vw, 5rem);
-  line-height: 0.9;
-  margin: 0.2rem 0 0.4rem;
+  font-size: clamp(2.8rem, 12vw, 4.2rem);
+  line-height: 0.95;
+  margin: 0.15rem 0 0.35rem;
   color: var(--paper);
-  text-shadow: 0 8px 0 rgba(0, 0, 0, 0.28);
+  text-shadow: 0 6px 0 rgba(0, 0, 0, 0.28);
 }
 
 .lede {
@@ -178,6 +178,7 @@ button {
 
 .chip-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
@@ -395,16 +396,11 @@ button {
   font-weight: 700;
 }
 
-.play-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
 .now-playing {
   font-weight: 800;
   font-size: 1.05rem;
+  margin: 0;
+  text-align: center;
 }
 
 .timer {
@@ -416,6 +412,15 @@ button {
   border: 1px solid var(--line);
   position: relative;
   overflow: hidden;
+}
+
+.play-screen .timer {
+  width: 100%;
+  min-width: 0;
+}
+
+.play-screen .timer-digits {
+  font-size: 2.55rem;
 }
 
 .timer::after {
@@ -503,6 +508,24 @@ button {
 .play-count {
   text-align: center;
   color: var(--muted);
+}
+
+.play-screen {
+  gap: 0.75rem;
+}
+
+@media (max-height: 760px) {
+  .game-card-target {
+    font-size: clamp(2rem, 9vw, 2.8rem);
+  }
+
+  .game-card-taboos li {
+    font-size: 1.15rem;
+  }
+
+  .btn-correct {
+    min-height: 3.6rem;
+  }
 }
 
 .play-actions {
