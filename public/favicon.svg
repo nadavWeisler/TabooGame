@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#140f0c"/>
+  <rect x="13" y="9" width="38" height="46" rx="6" fill="#f3e6c8"/>
+  <text x="32" y="40" text-anchor="middle" font-size="22" font-family="Rubik, Heebo, sans-serif" font-weight="800" fill="#2a1c12">ט</text>
+  <circle cx="32" cy="32" r="17" fill="none" stroke="#d4523e" stroke-width="3.2"/>
+  <path d="M21.5 21.5 L42.5 42.5" stroke="#d4523e" stroke-width="3.2" stroke-linecap="round"/>
+</svg>
