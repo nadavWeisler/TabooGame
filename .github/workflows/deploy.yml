@@ -1,9 +1,10 @@
-# Deploy the Vite build to GitHub Pages (project site: /TabooGame/).
+# Deploy the Vite production build to GitHub Pages (project site: /TabooGame/).
 name: Deploy GitHub Pages
 
 on:
   push:
     branches: ['main']
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -12,8 +13,8 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: pages-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -30,14 +31,43 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
+        env:
+          PAGES_BASE: /TabooGame/
+      - name: Verify production HTML
+        run: |
+          if grep -F '/src/main.tsx' dist/index.html; then
+            echo '::error::dist/index.html still references /src/main.tsx (Vite dev entry).'
+            exit 1
+          fi
+          grep -F '/TabooGame/assets/' dist/index.html
       - name: Setup Pages
+        if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
+      - name: Use GitHub Actions as Pages source
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          build_type=$(gh api "repos/${GITHUB_REPOSITORY}/pages" --jq .build_type)
+          echo "Pages build_type=${build_type}"
+          if [ "${build_type}" = "workflow" ]; then
+            exit 0
+          fi
+          echo "Switching Pages source from '${build_type}' to GitHub Actions..."
+          if gh api --method PUT "repos/${GITHUB_REPOSITORY}/pages" -f build_type=workflow; then
+            exit 0
+          fi
+          echo "::error::Pages is still publishing from a branch (build_type=${build_type}), so GitHub serves the Vite dev index.html (/src/main.tsx). Set Settings → Pages → Source to GitHub Actions, then re-run this workflow."
+          exit 1
       - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:
